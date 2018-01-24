@@ -8,6 +8,12 @@ It contains implementation for fitting Factorial Hidden Markov Models using C++ 
 Example usage:
 
 ```r
+# install package
+devtools::install_github("kasparmartens/ensembleFHMM")
+
+# load package
+library(ensembleFHMM)
+
 # initialise the X matrix (with K rows and N columns)
 K <- 3
 N <- 10
@@ -17,7 +23,8 @@ data <- generate_Y_gaussian(X, w = c(0.2, 0.3, 0.5), h = 15, sd = 1)
 
 # initialise ensemble of chains for sampling
 X_init <- X
-w_init <- c(0.2, 0.3, 0.5)
+w_init <- gtools::rdirichlet(1, rep(1, K+1))
+y <- data$Y
 ensemble <- FHMM_ensemble_init(y, X_init, w_init, h_mu = 15, sigma2_init = 1, inv_temperatures = c(1.0, 0.2), HB_sampling = TRUE)
 # one iteration of forward-filtering-backward-sampling
 ensemble$update_x()
